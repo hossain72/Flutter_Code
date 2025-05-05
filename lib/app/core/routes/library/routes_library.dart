@@ -1,6 +1,7 @@
 library routes;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_code/app/pages/animation/animated_container_example.dart';
 import 'package:flutter_code/app/pages/animation/animation_page.dart';
 
 import '../../../pages/splash/views/splash_page.dart';
