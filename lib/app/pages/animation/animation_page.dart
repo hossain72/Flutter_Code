@@ -20,7 +20,7 @@ class AnimationPage extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 16.h),
           child: SingleChildScrollView(
             child: Column(
-              spacing: 10.h,
+              spacing: 20.h,
               children: [
                 /*InkWell(
                   onTap: () {
