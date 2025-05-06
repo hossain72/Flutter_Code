@@ -1,4 +1,4 @@
-part of routes;
+part of "../library/routes_library.dart";
 
 abstract class Routes {
   static const splash = _Paths.splash;

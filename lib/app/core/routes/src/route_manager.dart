@@ -1,4 +1,4 @@
-part of routes;
+part of "../library/routes_library.dart";
 
 class RouteManager {
   // Singleton instance

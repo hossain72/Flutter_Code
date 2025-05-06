@@ -1,4 +1,4 @@
-part of routes;
+part of "../library/routes_library.dart";
 
 class AppRouteObserver extends NavigatorObserver {
   final RouteManager routeManager = RouteManager();
@@ -22,25 +22,25 @@ class AppRouteObserver extends NavigatorObserver {
     }
   }
 
-  @override
+  /*  @override
   void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
-    /*if (oldRoute?.settings.name != null) {
-      routeManager.removeRoute(oldRoute!.settings.name!);
-    }
-    if (newRoute?.settings.name != null) {
-      routeManager.addRoute(newRoute!.settings.name!);
-    }*/
-  }
+    // if (oldRoute?.settings.name != null) {
+    //   routeManager.removeRoute(oldRoute!.settings.name!);
+    // }
+    // if (newRoute?.settings.name != null) {
+    //   routeManager.addRoute(newRoute!.settings.name!);
+    // }
+  }*/
 
-  @override
+  /*  @override
   void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didRemove(route, previousRoute);
-    /*if (route.settings.name != null) {
-      routeManager.removeRoute(route.settings.name!);
-    }
-    if (previousRoute != null && previousRoute.settings.name != null) {
-      routeManager.setCurrentRoute(previousRoute.settings.name!);
-    }*/
-  }
+    // if (route.settings.name != null) {
+    //   routeManager.removeRoute(route.settings.name!);
+    // }
+    // if (previousRoute != null && previousRoute.settings.name != null) {
+    //   routeManager.setCurrentRoute(previousRoute.settings.name!);
+    // }
+  }*/
 }

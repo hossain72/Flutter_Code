@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum Flavor { DEV, PROD, TEST }
+enum Flavor { dev, prod, test }
 
 class FlavorConfig {
   final Flavor flavor;
@@ -19,11 +19,15 @@ class FlavorConfig {
     return _instance!;
   }
 
-  static bool isPROD() => _instance?.flavor == Flavor.PROD;
+  static bool isPROD() => _instance?.flavor == Flavor.prod;
 
-  static bool isDEV() => _instance?.flavor == Flavor.DEV;
+  static bool isDEV() => _instance?.flavor == Flavor.dev;
 
-  static bool isTEST() => _instance?.flavor == Flavor.TEST;
+  static bool isTEST() => _instance?.flavor == Flavor.test;
 
-  static final Map<Flavor, String> _map = {Flavor.PROD: "Prod", Flavor.DEV: "Dev", Flavor.TEST: "Test"};
+  static final Map<Flavor, String> _map = {
+    Flavor.prod: "Prod",
+    Flavor.dev: "Dev",
+    Flavor.test: "Test",
+  };
 }

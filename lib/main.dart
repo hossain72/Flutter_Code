@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'app/core/utils/svgList.dart';
+import 'app/core/utils/svg_list.dart';
 import 'my_app.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();

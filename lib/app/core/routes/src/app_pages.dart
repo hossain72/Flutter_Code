@@ -1,4 +1,4 @@
-part of routes;
+part of "../library/routes_library.dart";
 
 class AppPages {
   // when the app is opened, this page will be the first to be shown
