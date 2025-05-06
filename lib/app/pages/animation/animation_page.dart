@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_code/app/core/extensions/build_context/build_context_device.dart';
+import 'package:flutter_code/app/pages/animation/animated_positioned_example.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'animated_container_example.dart';
@@ -20,7 +21,7 @@ class AnimationPage extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 16.h),
           child: SingleChildScrollView(
             child: Column(
-              spacing: 20.h,
+              spacing: 10.h,
               children: [
                 /*InkWell(
                   onTap: () {
@@ -35,6 +36,7 @@ class AnimationPage extends StatelessWidget {
                 ),*/
                 AnimatedContainerExample(),
                 AnimatedOpacityExample(),
+                AnimatedPositionedExample()
               ],
             ),
           ),
