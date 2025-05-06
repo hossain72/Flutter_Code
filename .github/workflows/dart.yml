@@ -1,0 +1,45 @@
+name: Flutter CI
+
+on:
+  push:
+    branches: [ "main", "dev" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout source code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Setup Flutter
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.5' # Use your preferred version
+
+      # Optional: Setup Java (needed for Android builds)
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17' # Java 11 also works for most Android builds
+
+      # Install dependencies
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Analyze Dart/Flutter code
+      - name: Analyze project
+        run: flutter analyze
+
+      # Run unit tests
+      #- name: Run tests
+      # run: flutter test
+
+      # Optional: Build Android APK
+      - name: Build Android APK
+        run: flutter build apk --debug
