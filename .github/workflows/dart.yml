@@ -15,31 +15,35 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Setup Flutter
+      # Setup Flutter (ensure Dart SDK 3.7+)
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.5' # Use your preferred version
+          flutter-version: '3.22.1' # This includes Dart 3.7.0
 
-      # Optional: Setup Java (needed for Android builds)
+      # Setup Java (needed for Android)
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '17' # Java 11 also works for most Android builds
+          java-version: '17'
+
+      # Disable analytics for CI (optional)
+      - name: Disable Flutter analytics
+        run: flutter config --no-analytics
 
       # Install dependencies
       - name: Install dependencies
         run: flutter pub get
 
-      # Analyze Dart/Flutter code
+      # Analyze code
       - name: Analyze project
         run: flutter analyze
 
-      # Run unit tests
+      # Run tests
       #- name: Run tests
-      # run: flutter test
+      #  run: flutter test
 
-      # Optional: Build Android APK
+      # Build Android APK (debug)
       - name: Build Android APK
         run: flutter build apk --debug
