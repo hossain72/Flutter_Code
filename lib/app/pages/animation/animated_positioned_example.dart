@@ -20,7 +20,7 @@ class _AnimatedPositionedExampleState extends State<AnimatedPositionedExample> {
           SizedBox(height: 10),
           SizedBox(
             width: 300,
-            height: 300,
+            height: 150,
             child: Stack(
               children: [
                 AnimatedPositioned(
