@@ -3,11 +3,11 @@ import 'package:flutter_code/app/core/extensions/build_context/build_context_dev
 import 'package:flutter_code/app/pages/animation/animated_builder_example.dart';
 import 'package:flutter_code/app/pages/animation/animated_positioned_example.dart';
 import 'package:flutter_code/app/pages/animation/animation_controller_example.dart';
-import 'package:flutter_code/app/pages/animation/tween_animation_examplewith_animated_widget.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'animated_container_example.dart';
 import 'animated_opacity_example.dart';
+import 'hero_animation_example.dart';
 
 class AnimationPage extends StatelessWidget {
   const AnimationPage({super.key});
@@ -70,7 +70,7 @@ class AnimationPage extends StatelessWidget {
                 Card(
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 30),
-                    child: TweenAnimationExample(),
+                    child: HeroSourceScreen(),
                   ),
                 ),
               ],
