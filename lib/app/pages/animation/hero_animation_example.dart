@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-// Hero Animation Example
-// Place this in two different screens for transition
-
 // First screen:
 class HeroSourceScreen extends StatelessWidget {
   const HeroSourceScreen({super.key});
