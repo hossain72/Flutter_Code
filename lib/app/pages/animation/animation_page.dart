@@ -3,6 +3,7 @@ import 'package:flutter_code/app/core/extensions/build_context/build_context_dev
 import 'package:flutter_code/app/pages/animation/animated_builder_example.dart';
 import 'package:flutter_code/app/pages/animation/animated_positioned_example.dart';
 import 'package:flutter_code/app/pages/animation/animation_controller_example.dart';
+import 'package:flutter_code/app/pages/animation/staggered_animation_example.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'animated_container_example.dart';
@@ -71,6 +72,12 @@ class AnimationPage extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 30),
                     child: HeroSourceScreen(),
+                  ),
+                ),
+                Card(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 30),
+                    child: StaggeredAnimationExample(),
                   ),
                 ),
               ],
