@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_code/app/core/extensions/build_context/build_context_device.dart';
 import 'package:flutter_code/app/pages/animation/animated_builder_example.dart';
+import 'package:flutter_code/app/pages/animation/animated_cross_fade_example.dart';
 import 'package:flutter_code/app/pages/animation/animated_positioned_example.dart';
 import 'package:flutter_code/app/pages/animation/animation_controller_example.dart';
 import 'package:flutter_code/app/pages/animation/staggered_animation_example.dart';
@@ -78,6 +79,12 @@ class AnimationPage extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 30),
                     child: StaggeredAnimationExample(),
+                  ),
+                ),
+                Card(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 30),
+                    child: AnimatedCrossFadeExample(),
                   ),
                 ),
               ],
