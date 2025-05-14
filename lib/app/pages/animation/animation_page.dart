@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_code/app/core/extensions/build_context/build_context_device.dart';
-import 'package:flutter_code/app/pages/animation/animated_builder_example.dart';
-import 'package:flutter_code/app/pages/animation/animated_cross_fade_example.dart';
-import 'package:flutter_code/app/pages/animation/animated_positioned_example.dart';
-import 'package:flutter_code/app/pages/animation/animation_controller_example.dart';
-import 'package:flutter_code/app/pages/animation/staggered_animation_example.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'animated_container_example.dart';
-import 'animated_opacity_example.dart';
-import 'hero_animation_example.dart';
+
+import 'widgets/animated_builder_example.dart';
+import 'widgets/animated_container_example.dart';
+import 'widgets/animated_cross_fade_example.dart';
+import 'widgets/animated_opacity_example.dart';
+import 'widgets/animated_positioned_example.dart';
+import 'widgets/animation_controller_example.dart';
+import 'widgets/hero_animation_example.dart';
+import 'widgets/staggered_animation_example.dart';
 
 class AnimationPage extends StatelessWidget {
   const AnimationPage({super.key});
@@ -28,17 +29,6 @@ class AnimationPage extends StatelessWidget {
             child: Column(
               spacing: 10.h,
               children: [
-                /*InkWell(
-                  onTap: () {
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade300,
-                      borderRadius: BorderRadius.all(Radius.circular(10.r)),
-                    ),
-                    child: ListTile(title: Text("Animated Container example")),
-                  ),
-                ),*/
                 Card(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
