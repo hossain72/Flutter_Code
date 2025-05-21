@@ -35,7 +35,7 @@ class TextFormFieldWidget extends StatelessWidget {
   const TextFormFieldWidget({
     super.key,
     required this.controller,
-    required this.textInputType,
+    this.textInputType = TextInputType.text,
     required this.validator,
     this.prefixIcon,
     this.maxLines,

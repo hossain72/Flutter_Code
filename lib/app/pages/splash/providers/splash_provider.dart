@@ -13,7 +13,7 @@ class SplashProvider extends ChangeNotifier {
     await Future.delayed(const Duration(milliseconds: 300));
     Pages.goToOffAllNamedRouts(
       navigatorKey.currentContext!,
-      Routes.animationPage,
+      Routes.sqflitePage,
     );
   }
 }

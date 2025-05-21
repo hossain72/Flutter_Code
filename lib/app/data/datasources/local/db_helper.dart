@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_code/app/core/extensions/collections/list_extension.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -21,7 +20,6 @@ class DBHelper {
   static const String tableUser = "user";
   static const String columnUserId = "user_id";
   static const String columnUserName = "user_name";
-  static const String columnUserGender = "user_gender";
   static const String columnUserMobileNumber = "user_mobile";
   static const String columnUserEmail = "user_email";
 
@@ -32,7 +30,6 @@ class DBHelper {
     CREATE TABLE $tableUser (
       $columnUserId INTEGER PRIMARY KEY AUTOINCREMENT,
       $columnUserName TEXT,
-      $columnUserGender TEXT,
       $columnUserMobileNumber TEXT UNIQUE,
       $columnUserEmail TEXT UNIQUE
     )
@@ -55,4 +52,40 @@ class DBHelper {
     );
   }
 
+  Future<bool> createUser({
+    required String name,
+    required String mobile,
+    required String email,
+  }) async {
+    var db = await getDB();
+
+    try {
+      int rowsAffected =
+          await db?.insert(tableUser, {
+            columnUserName: name,
+            columnUserMobileNumber: mobile,
+            columnUserEmail: email,
+          }) ??
+          0;
+
+      return rowsAffected > 0;
+    } catch (e) {
+      debugPrint("Error inserting user: $e");
+      return false;
+    }
+  }
+
+  Future<UserModel> getAllUser() async {
+    var db = await getDB();
+
+    List<Map<String, dynamic>> users = await db?.query(tableUser) ?? [];
+
+    if (users.isEmpty) {
+      return UserModel(status: true, message: "succeeded", data: []);
+    }
+
+    List<User> userList = users.map((user) => User.fromJson(user)).toList();
+    // Return the UserMode object
+    return UserModel(status: true, message: "succeeded", data: userList);
+  }
 }

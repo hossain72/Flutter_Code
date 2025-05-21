@@ -1,17 +1,17 @@
 import 'dart:convert';
 
-UserMode userModeFromJson(String str) => UserMode.fromJson(json.decode(str));
+UserModel userModeFromJson(String str) => UserModel.fromJson(json.decode(str));
 
-String userModeToJson(UserMode data) => json.encode(data.toJson());
+String userModeToJson(UserModel data) => json.encode(data.toJson());
 
-class UserMode {
+class UserModel {
   bool? status = false;
   String? message = "failed";
   List<User>? data;
 
-  UserMode({this.status, this.message, this.data});
+  UserModel({this.status, this.message, this.data});
 
-  factory UserMode.fromJson(Map<String, dynamic> json) => UserMode(
+  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
     status:
         json[""
             "status"],
@@ -33,24 +33,21 @@ class UserMode {
 class User {
   int? id;
   String? name;
-  String? gender;
   String? email;
   String? mobileNumber;
 
-  User({this.id, this.name, this.gender, this.email, this.mobileNumber});
+  User({this.id, this.name, this.email, this.mobileNumber});
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
-    id: json["id"],
-    name: json["name"],
-    gender: json["gender"],
-    mobileNumber: json["mobile_number"],
-    email: json["email"],
+  factory User.fromJson(Map<String, dynamic> json) =>  User(
+    id: json['user_id'] as int?,
+    name: json['user_name'] as String?,
+    mobileNumber: json['user_mobile'] as String?,
+    email: json['user_email'] as String?,
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
     "name": name,
-    "gender": gender,
     "mobile_number": mobileNumber,
     "email": email,
   };

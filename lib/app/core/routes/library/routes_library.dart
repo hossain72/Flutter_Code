@@ -2,6 +2,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_code/app/pages/animation/animation_page.dart';
+import 'package:flutter_code/app/pages/sqlite/sqflite_example.dart';
 
 import '../../../pages/splash/views/splash_page.dart';
 
