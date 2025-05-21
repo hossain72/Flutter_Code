@@ -8,7 +8,7 @@ extension StringExtension on String {
   /// "hello".capitalize()
   /// Output:
   /// "Hello"
-  String capitalize() {
+  String get capitalize {
     if (isEmpty) return this;
     return this[0].toUpperCase() + substring(1);
   }
@@ -84,7 +84,7 @@ extension StringExtension on String {
   /// "hello world".toTitleCase()
   /// Output:
   /// "Hello World"
-  String toTitleCase() => split(' ').map((word) => word.capitalize()).join(' ');
+  String toTitleCase() => split(' ').map((word) => word.capitalize).join(' ');
 
   /// Checks if the string contains only numeric characters.
   ///
@@ -132,7 +132,7 @@ extension StringExtension on String {
     return words.asMap().entries.map((entry) {
       final index = entry.key;
       final word = entry.value;
-      return index == 0 ? word.toLowerCase() : word.capitalize();
+      return index == 0 ? word.toLowerCase() : word.capitalize;
     }).join();
   }
 
@@ -221,4 +221,21 @@ extension StringExtension on String {
   /// Output:
   /// 3
   int getWordCount() => trim().isEmpty ? 0 : split(RegExp(r'\s+')).length;
+
+  bool get isValidBDPhone {
+    final bdPhoneRegExp = RegExp(r'^(?:\+8801|01)[3-9]\d{8}$');
+    return bdPhoneRegExp.hasMatch(this);
+  }
+
+  String get formattedWithBDCode {
+    final trimmed = trim();
+    if (trimmed.startsWith('+88')) {
+      return trimmed;
+    } else if (trimmed.startsWith('01')) {
+      return '+88$trimmed';
+    } else {
+      // Return original if it doesn't look like a BD mobile number
+      return trimmed;
+    }
+  }
 }

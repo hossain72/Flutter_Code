@@ -8,3 +8,4 @@ class SqfliteExample extends StatelessWidget {
     return const Placeholder();
   }
 }
+

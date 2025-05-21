@@ -31,7 +31,7 @@ class DBHelper {
       $columnUserId INTEGER PRIMARY KEY AUTOINCREMENT,
       $columnUserName TEXT,
       $columnUserMobileNumber TEXT UNIQUE,
-      $columnUserEmail TEXT UNIQUE
+      $columnUserEmail TEXT UNIQUE NOT NULL
     )
   ''';
 
@@ -87,5 +87,53 @@ class DBHelper {
     List<User> userList = users.map((user) => User.fromJson(user)).toList();
     // Return the UserMode object
     return UserModel(status: true, message: "succeeded", data: userList);
+  }
+
+  Future<bool> editUser({
+    required int id,
+    required String name,
+    required String mobile,
+    required String email,
+  }) async {
+    var db = await getDB();
+
+    try {
+      int rowsUpdated =
+          await db?.update(
+            tableUser,
+            {
+              columnUserName: name,
+              columnUserMobileNumber: mobile,
+              columnUserEmail: email,
+            },
+            where: '$columnUserId = ?',
+            whereArgs: [id],
+          ) ??
+          0;
+
+      return rowsUpdated > 0;
+    } catch (e) {
+      debugPrint("Error updating user: $e");
+      return false;
+    }
+  }
+
+  Future<bool> deleteUser(int id) async {
+    var db = await getDB();
+
+    try {
+      int rowsDeleted =
+          await db?.delete(
+            tableUser,
+            where: '$columnUserId = ?',
+            whereArgs: [id],
+          ) ??
+          0;
+
+      return rowsDeleted > 0;
+    } catch (e) {
+      debugPrint("Error deleting user: $e");
+      return false;
+    }
   }
 }
