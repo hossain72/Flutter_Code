@@ -1,14 +1,14 @@
-import 'dart:math';
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_code/app/core/extensions/data_types/string_extension.dart';
 import 'package:flutter_code/app/core/extensions/build_context/build_context_device.dart';
+import 'package:flutter_code/app/pages/sqlite/widgets/add_user_widget.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../common_widgets/text_widget.dart';
 import '../../data/datasources/local/db_helper.dart';
-import '../../common_widgets/text_button_widget.dart';
-import '../../common_widgets/text_form_field_widget.dart';
 import '../../data/datasources/local/models/user_model.dart';
 
 class SqfliteExample extends StatefulWidget {
@@ -19,11 +19,6 @@ class SqfliteExample extends StatefulWidget {
 }
 
 class _SqfliteExampleState extends State<SqfliteExample> {
-  final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _mobileNumberController = TextEditingController();
-
   final List<User> _userList = [];
   DBHelper? dbHelper;
 
@@ -47,7 +42,7 @@ class _SqfliteExampleState extends State<SqfliteExample> {
         child: Column(
           children: [
             SizedBox(height: 20),
-            _formWidget(context),
+            //_formWidget(context),
             Expanded(
               child:
                   _userList.isNotEmpty
@@ -57,76 +52,13 @@ class _SqfliteExampleState extends State<SqfliteExample> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _formWidget(BuildContext context) {
-    final width = context.width;
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8),
-      child: Card(
-        color: Colors.grey.shade100,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              spacing: 10,
-              children: [
-                TextFormFieldWidget(
-                  controller: _nameController,
-                  hintText: "Enter your name",
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return "Please enter your name";
-                    }
-                    return null;
-                  },
-                ),
-
-                TextFormFieldWidget(
-                  controller: _emailController,
-                  hintText: "Enter your email",
-                  textInputType: TextInputType.emailAddress,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return "Please enter your email";
-                    }
-                    if (!value.trim().isValidEmail) {
-                      return "Please enter a valid email";
-                    }
-                    return null;
-                  },
-                ),
-                TextFormFieldWidget(
-                  controller: _mobileNumberController,
-                  hintText: "Enter your mobile number",
-                  textInputType: TextInputType.phone,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return "Please enter your mobile number";
-                    }
-                    if (!value.trim().isValidBDPhone) {
-                      return "Please enter a valid Bangladeshi mobile number";
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 10),
-                SizedBox(
-                  width: min(width / 2, width / 1.5),
-                  child: TextButtonWidget(
-                    onPressed: () {
-                      addUser();
-                    },
-                    buttonText: "Add User",
-                  ),
-                ),
-                SizedBox(height: 10),
-              ],
-            ),
-          ),
-        ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          addUserDialog(context, (name, email, mobileNumber) {
+            addUser(name, email, mobileNumber);
+          });
+        },
+        child: Icon(Icons.add),
       ),
     );
   }
@@ -231,8 +163,20 @@ class _SqfliteExampleState extends State<SqfliteExample> {
     setState(() {});
   }
 
-  Future<void> addUser() async {
-    if (_formKey.currentState?.validate() ?? false) {
+  Future<void> addUser(String name, String email, String mobileNumber) async {
+    var isCreated = await dbHelper!.createUser(
+      name: name,
+      mobile: mobileNumber,
+      email: email,
+    );
+    if (isCreated) {
+      debugPrint("User created done");
+    } else {
+      debugPrint("User not created");
+    }
+    getAllUser();
+
+    /* if (_formKey.currentState?.validate() ?? false) {
       var name = _nameController.text.trim();
       var email = _emailController.text.trim();
       var mobileNumber = _mobileNumberController.text.formattedWithBDCode;
@@ -250,8 +194,8 @@ class _SqfliteExampleState extends State<SqfliteExample> {
         debugPrint("User not created");
       }
 
-      getAllUser();
-    }
+
+    }*/
   }
 
   Future<void> deleteUser(int id) async {
@@ -265,5 +209,24 @@ class _SqfliteExampleState extends State<SqfliteExample> {
     setState(() {
       _userList.removeWhere((user) => user.id == id);
     });
+  }
+
+  addUserDialog(
+    BuildContext context,
+    Function(String name, String email, String mobileNumber)? addUserCallBack,
+  ) {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          insetPadding: EdgeInsets.symmetric(horizontal: 22.r),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16.r)),
+          ),
+          child: AddUserWidget(addUserCallBack: addUserCallBack),
+        );
+      },
+    );
   }
 }
