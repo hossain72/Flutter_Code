@@ -1,9 +1,9 @@
-
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_code/app/core/extensions/data_types/string_extension.dart';
 import 'package:flutter_code/app/core/extensions/build_context/build_context_device.dart';
+import 'package:flutter_code/app/core/utils/app_log.dart';
 import 'package:flutter_code/app/pages/sqlite/widgets/add_user_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -54,9 +54,12 @@ class _SqfliteExampleState extends State<SqfliteExample> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          addUserDialog(context, (name, email, mobileNumber) {
-            addUser(name, email, mobileNumber);
-          });
+          addUserDialog(
+            context,
+            addUserCallBack: (user) {
+              addUser(user);
+            },
+          );
         },
         child: Icon(Icons.add),
       ),
@@ -137,7 +140,14 @@ class _SqfliteExampleState extends State<SqfliteExample> {
               );
 
               if (selected == 'edit') {
-                // Handle edit logic
+                if (!mounted) return;
+                addUserDialog(
+                  context,
+                  user: user,
+                  addUserCallBack: (user) {
+                    editUser(user);
+                  },
+                );
               } else if (selected == 'delete') {
                 if (user.id != null) {
                   deleteUser(user.id!);
@@ -163,11 +173,11 @@ class _SqfliteExampleState extends State<SqfliteExample> {
     setState(() {});
   }
 
-  Future<void> addUser(String name, String email, String mobileNumber) async {
+  Future<void> addUser(User user) async {
     var isCreated = await dbHelper!.createUser(
-      name: name,
-      mobile: mobileNumber,
-      email: email,
+      name: user.name,
+      mobile: user.mobileNumber,
+      email: user.email,
     );
     if (isCreated) {
       debugPrint("User created done");
@@ -175,27 +185,22 @@ class _SqfliteExampleState extends State<SqfliteExample> {
       debugPrint("User not created");
     }
     getAllUser();
+  }
 
-    /* if (_formKey.currentState?.validate() ?? false) {
-      var name = _nameController.text.trim();
-      var email = _emailController.text.trim();
-      var mobileNumber = _mobileNumberController.text.formattedWithBDCode;
-      var isCreated = await dbHelper!.createUser(
-        name: name,
-        mobile: mobileNumber,
-        email: email,
-      );
-      if (isCreated) {
-        debugPrint("User created done");
-        _nameController.clear();
-        _emailController.clear();
-        _mobileNumberController.clear();
-      } else {
-        debugPrint("User not created");
-      }
-
-
-    }*/
+  Future<void> editUser(User user) async {
+    AppLog.log("edit user ====${jsonEncode(user)}");
+    var isCreated = await dbHelper!.editUser(
+      id: user.id,
+      name: user.name,
+      mobile: user.mobileNumber,
+      email: user.email,
+    );
+    if (isCreated) {
+      debugPrint("User edited done");
+    } else {
+      debugPrint("User not edited");
+    }
+    getAllUser();
   }
 
   Future<void> deleteUser(int id) async {
@@ -212,9 +217,10 @@ class _SqfliteExampleState extends State<SqfliteExample> {
   }
 
   addUserDialog(
-    BuildContext context,
-    Function(String name, String email, String mobileNumber)? addUserCallBack,
-  ) {
+    BuildContext context, {
+    Function(User user)? addUserCallBack,
+    User? user,
+  }) {
     return showDialog(
       context: context,
       barrierDismissible: false,
@@ -224,7 +230,7 @@ class _SqfliteExampleState extends State<SqfliteExample> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(16.r)),
           ),
-          child: AddUserWidget(addUserCallBack: addUserCallBack),
+          child: AddUserWidget(addUserCallBack: addUserCallBack, user: user),
         );
       },
     );

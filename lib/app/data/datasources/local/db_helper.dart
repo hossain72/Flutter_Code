@@ -53,24 +53,29 @@ class DBHelper {
   }
 
   Future<bool> createUser({
-    required String name,
-    required String mobile,
-    required String email,
+    required String? name,
+    required String? mobile,
+    required String? email,
   }) async {
-    var db = await getDB();
+    if (name != null && email != null) {
+      var db = await getDB();
 
-    try {
-      int rowsAffected =
-          await db?.insert(tableUser, {
-            columnUserName: name,
-            columnUserMobileNumber: mobile,
-            columnUserEmail: email,
-          }) ??
-          0;
+      try {
+        int rowsAffected =
+            await db?.insert(tableUser, {
+              columnUserName: name,
+              columnUserMobileNumber: mobile,
+              columnUserEmail: email,
+            }) ??
+            0;
 
-      return rowsAffected > 0;
-    } catch (e) {
-      debugPrint("Error inserting user: $e");
+        return rowsAffected > 0;
+      } catch (e) {
+        debugPrint("Error inserting user: $e");
+        return false;
+      }
+    } else {
+      debugPrint("Some field is null");
       return false;
     }
   }
@@ -90,30 +95,35 @@ class DBHelper {
   }
 
   Future<bool> editUser({
-    required int id,
-    required String name,
-    required String mobile,
-    required String email,
+    required int? id,
+    required String? name,
+    required String? mobile,
+    required String? email,
   }) async {
-    var db = await getDB();
+    if (id != null && name != null && email != null) {
+      var db = await getDB();
 
-    try {
-      int rowsUpdated =
-          await db?.update(
-            tableUser,
-            {
-              columnUserName: name,
-              columnUserMobileNumber: mobile,
-              columnUserEmail: email,
-            },
-            where: '$columnUserId = ?',
-            whereArgs: [id],
-          ) ??
-          0;
+      try {
+        int rowsUpdated =
+            await db?.update(
+              tableUser,
+              {
+                columnUserName: name,
+                columnUserMobileNumber: mobile,
+                columnUserEmail: email,
+              },
+              where: '$columnUserId = ?',
+              whereArgs: [id],
+            ) ??
+            0;
 
-      return rowsUpdated > 0;
-    } catch (e) {
-      debugPrint("Error updating user: $e");
+        return rowsUpdated > 0;
+      } catch (e) {
+        debugPrint("Error updating user: $e");
+        return false;
+      }
+    } else {
+      debugPrint("Some field is null");
       return false;
     }
   }
