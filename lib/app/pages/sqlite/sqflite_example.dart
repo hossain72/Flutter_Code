@@ -7,6 +7,7 @@ import 'package:flutter_code/app/core/utils/app_log.dart';
 import 'package:flutter_code/app/pages/sqlite/widgets/add_user_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../common_widgets/sliver_separated_list.dart';
 import '../../common_widgets/text_widget.dart';
 import '../../data/datasources/local/db_helper.dart';
 import '../../data/datasources/local/models/user_model.dart';
@@ -39,16 +40,15 @@ class _SqfliteExampleState extends State<SqfliteExample> {
         width: width,
         height: height,
         color: Colors.white,
-        child: Column(
-          children: [
-            SizedBox(height: 20),
-            //_formWidget(context),
-            Expanded(
-              child:
-                  _userList.isNotEmpty
-                      ? _userListView()
-                      : Center(child: TextWidget(text: "No User found")),
-            ),
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(child: SizedBox(height: 10)),
+            _userList.isNotEmpty
+                ? _userSliverList()
+                : SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Center(child: TextWidget(text: "No User found")),
+                ),
           ],
         ),
       ),
@@ -66,32 +66,82 @@ class _SqfliteExampleState extends State<SqfliteExample> {
     );
   }
 
-  Widget _userListView() {
-    return ListView.separated(
-      padding: EdgeInsets.symmetric(horizontal: 8),
-      itemBuilder: (_, index) {
-        return Card(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
+  Widget _userSliverList() {
+    return SliverSeparatedList(
+      itemCount: _userList.length,
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      itemBuilder: (context, index) {
+        final user = _userList[index];
+
+        return Dismissible(
+          key: ValueKey(user.id),
+          direction: DismissDirection.horizontal,
+          background: _editBackground(),
+          // Swipe Right (startToEnd)
+          secondaryBackground: _deleteBackground(),
+          // Swipe Left (endToStart)
+          confirmDismiss: (direction) async {
+            if (direction == DismissDirection.endToStart) {
+              // Delete
+              final confirmDelete = await showDialog<bool>(
+                context: context,
+                builder:
+                    (ctx) => AlertDialog(
+                      title: Text('Delete User'),
+                      content: Text(
+                        'Are you sure you want to delete ${user.name}?',
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(ctx, false),
+                          child: Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.pop(ctx, true),
+                          child: Text('Delete'),
+                        ),
+                      ],
+                    ),
+              );
+              return confirmDelete == true;
+            } else if (direction == DismissDirection.startToEnd) {
+              // Edit
+              addUserDialog(
+                context,
+                user: user,
+                addUserCallBack: (updatedUser) {
+                  editUser(updatedUser);
+                },
+              );
+              return false; // Prevent item from being dismissed
+            }
+            return false;
+          },
+          onDismissed: (direction) {
+            if (direction == DismissDirection.endToStart && user.id != null) {
+              deleteUser(user.id!);
+            }
+          },
+          child: Card(
             child: ListTile(
               contentPadding: EdgeInsets.only(left: 8, right: 0),
-              trailing: _trailingWidget(_userList[index]),
+              trailing: _trailingWidget(user),
               title: Row(
-                spacing: 5,
                 children: [
                   TextWidget(text: "User Name :"),
+                  SizedBox(width: 5),
                   TextWidget(
-                    text: "${_userList[index].name?.capitalize}",
+                    text: "${user.name?.capitalize}",
                     fontWeight: FontWeight.w700,
                   ),
                 ],
               ),
               subtitle: Row(
-                spacing: 5,
                 children: [
                   TextWidget(text: "Email Address :"),
+                  SizedBox(width: 5),
                   TextWidget(
-                    text: "${_userList[index].email}",
+                    text: "${user.email}",
                     fontWeight: FontWeight.w700,
                   ),
                 ],
@@ -100,10 +150,25 @@ class _SqfliteExampleState extends State<SqfliteExample> {
           ),
         );
       },
-      separatorBuilder: (BuildContext context, int index) {
-        return SizedBox(height: 10);
-      },
-      itemCount: _userList.length,
+      separatorBuilder: (_, __) => SizedBox(height: 10),
+    );
+  }
+
+  Widget _deleteBackground() {
+    return Container(
+      color: Colors.red,
+      alignment: Alignment.centerRight,
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: Icon(Icons.delete, color: Colors.white),
+    );
+  }
+
+  Widget _editBackground() {
+    return Container(
+      color: Colors.blue,
+      alignment: Alignment.centerLeft,
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: Icon(Icons.edit, color: Colors.white),
     );
   }
 
@@ -161,7 +226,7 @@ class _SqfliteExampleState extends State<SqfliteExample> {
   Future<void> getAllUser() async {
     final userMode = await dbHelper!.getAllUser();
 
-    debugPrint("user model ==== ${jsonEncode(userMode)}");
+    AppLog.log("user model ==== ${jsonEncode(userMode)}");
 
     final users = userMode.data;
     if (users?.isNotEmpty ?? false) {
@@ -180,9 +245,9 @@ class _SqfliteExampleState extends State<SqfliteExample> {
       email: user.email,
     );
     if (isCreated) {
-      debugPrint("User created done");
+      AppLog.log("User created done");
     } else {
-      debugPrint("User not created");
+      AppLog.log("User not created");
     }
     getAllUser();
   }
@@ -196,9 +261,9 @@ class _SqfliteExampleState extends State<SqfliteExample> {
       email: user.email,
     );
     if (isCreated) {
-      debugPrint("User edited done");
+      AppLog.log("User edited done");
     } else {
-      debugPrint("User not edited");
+      AppLog.log("User not edited");
     }
     getAllUser();
   }
