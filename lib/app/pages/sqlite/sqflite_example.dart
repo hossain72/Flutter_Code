@@ -33,7 +33,7 @@ class _SqfliteExampleState extends State<SqfliteExample> {
   @override
   Widget build(BuildContext context) {
     final width = context.width;
-    final height = context.height;
+    final height = context.height; // Magenta
     return Scaffold(
       appBar: AppBar(title: Text("Sqflite example")),
       body: Container(
@@ -226,7 +226,7 @@ class _SqfliteExampleState extends State<SqfliteExample> {
   Future<void> getAllUser() async {
     final userMode = await dbHelper!.getAllUser();
 
-    AppLog.log("user model ==== ${jsonEncode(userMode)}");
+    AppLog.debug("user model ==== ${jsonEncode(userMode)}");
 
     final users = userMode.data;
     if (users?.isNotEmpty ?? false) {
@@ -245,15 +245,15 @@ class _SqfliteExampleState extends State<SqfliteExample> {
       email: user.email,
     );
     if (isCreated) {
-      AppLog.log("User created done");
+      AppLog.debug("User created done");
     } else {
-      AppLog.log("User not created");
+      AppLog.debug("User not created");
     }
     getAllUser();
   }
 
   Future<void> editUser(User user) async {
-    AppLog.log("edit user ====${jsonEncode(user)}");
+    AppLog.debug("edit user ====${jsonEncode(user)}");
     var isCreated = await dbHelper!.editUser(
       id: user.id,
       name: user.name,
@@ -261,9 +261,9 @@ class _SqfliteExampleState extends State<SqfliteExample> {
       email: user.email,
     );
     if (isCreated) {
-      AppLog.log("User edited done");
+      AppLog.debug("User edited done");
     } else {
-      AppLog.log("User not edited");
+      AppLog.debug("User not edited");
     }
     getAllUser();
   }
