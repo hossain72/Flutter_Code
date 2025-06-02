@@ -25,6 +25,8 @@ class FlavorConfig {
 
   static bool isTEST() => _instance?.flavor == Flavor.test;
 
+  static String? getFlavorName() => _instance?.flavor.name;
+
   static final Map<Flavor, String> _map = {
     Flavor.prod: "Prod",
     Flavor.dev: "Dev",
