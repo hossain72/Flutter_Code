@@ -22,6 +22,7 @@ dependencies:
   path_provider: ^2.1.5
   path: ^1.9.1
   hijri: ^3.0.0
+  simple_barcode_scanner: ^0.3.0
 
 dev_dependencies:
   flutter_test:
